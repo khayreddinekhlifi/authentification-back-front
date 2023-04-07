@@ -3,7 +3,7 @@ import axios from "axios";
 export const userRegister = createAsyncThunk("user/register", async (user) => {
   try {
     let response = await axios.post(
-      "http://localhost:5000/user/register",
+      "http://localhost:8000/user/register",
       user
     );
     return await response;
@@ -13,7 +13,7 @@ export const userRegister = createAsyncThunk("user/register", async (user) => {
 });
 export const userLogin = createAsyncThunk("user/login", async (user) => {
   try {
-    let response = await axios.post("http://localhost:5000/user/login", user);
+    let response = await axios.post("http://localhost:8000/user/login", user);
     return await response;
   } catch (error) {
     console.log(error);
@@ -21,7 +21,7 @@ export const userLogin = createAsyncThunk("user/login", async (user) => {
 });
 export const userCurrent = createAsyncThunk("user/current", async () => {
   try {
-    let response = await axios.get("http://localhost:5000/user/current", {
+    let response = await axios.get("http://localhost:8000/user/current", {
       headers: {
         Authorization: localStorage.getItem("token"),
       },
@@ -52,19 +52,19 @@ export const userSlice = createSlice({
     },
     [userRegister.fulfilled]: (state, action) => {
       state.status = "succcessssss";
-      state.user = action.payload.data.newUserToken;
-      localStorage.setItem("token", action.payload.data.token);
+      state.user = action.payload?.data?.newUserToken;
+      localStorage.setItem("token", action.payload.data?.token);
     },
     [userRegister.rejected]: (state) => {
-      state.status = "fail";
+      state.status = "failled";
     },
     [userLogin.pending]: (state) => {
       state.status = "pending";
     },
     [userLogin.fulfilled]: (state, action) => {
       state.status = "succcessssss";
-      state.user = action.payload.data.user;
-      localStorage.setItem("token", action.payload.data.token);
+      state.user = action.payload?.data?.user;
+      localStorage.setItem("token", action.payload.data?.token);
     },
     [userLogin.rejected]: (state) => {
       state.status = "fail";
@@ -74,7 +74,7 @@ export const userSlice = createSlice({
     },
     [userCurrent.fulfilled]: (state, action) => {
       state.status = "succcessssss";
-      state.user = action.payload?.data.user;
+      state.user = action.payload?.data?.user;
     },
     [userCurrent.rejected]: (state) => {
       state.status = "fail";

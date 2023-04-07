@@ -9,7 +9,7 @@ const Login = () => {
     password: "",
   });
   const dispatch = useDispatch();
-  const isAuth = localStorage.getItem("token");
+
   let navigate = useNavigate();
 
   return (

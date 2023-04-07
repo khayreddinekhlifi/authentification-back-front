@@ -19,6 +19,7 @@ app.use(cors());
 app.use(passport.initialize());
 //ROUTE
 app.use("/user", require("./routes/user"));
+app.use('/produit',require('./routes/produit'))
 app.listen(process.env.PORT, (err) => {
   err ? console.log(err) : console.log("server is running...");
 });

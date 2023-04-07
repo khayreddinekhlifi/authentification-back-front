@@ -1,13 +1,19 @@
-import logo from "./logo.svg";
+
 import "./App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route,useNavigate } from "react-router-dom";
 import Register from "./components/Register";
 import Login from "./components/Login";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { logout, userCurrent } from "./JS/userSlice/userSlice";
+import { useEffect, useState} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {  userCurrent } from "./JS/userSlice/userSlice";
 import Profil from "./components/Profil";
+import Header from "./components/Header";
+import Navbar from "./components/Navbar"
+import MobilCard from "./components/MobilCard"
 import PrivateRoute from "./routes/PrivateRoute";
+import { getproduct } from "./JS/productSlice/productSlice";
+import user from "./components/Header";
+import Contacter from "./components/Contacter";
 function App() {
   const isAuth = localStorage.getItem("token");
   const dispatch = useDispatch();
@@ -17,31 +23,29 @@ function App() {
       dispatch(userCurrent());
     }
   }, []);
+
+  useEffect(() => {
+    dispatch(getproduct())
+  }, [])
+
+  const products = useSelector((store) => store.product?.product);
+
   return (
     <div className="App">
-      <div className="header">
-        <h1>Auth workshop</h1>
-        {isAuth ? (
-          <button
-            onClick={() => {
-              dispatch(logout());
-              navigate("/");
-            }}
-          >
-            Logout
-          </button>
-        ) : null}
-      </div>
-
+      <Navbar/>
       <Routes>
-        <Route exact path="/" element={<Register />} />
+        <Route path="/"  element={<Header user={user}  />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route element={<PrivateRoute />}>
+        <Route path="/ réference" element={<h1>commander par référence</h1>} />
+        <Route path="/contactez" element={<Contacter />}/>
+        <Route element={<PrivateRoute />}/>
           <Route path="/profil" element={<Profil />} />
-        </Route>{" "}
+         
+        
       </Routes>
+      {products?.map((el) => <MobilCard mobil={el}  />)}
     </div>
   );
 }
-
-export default App;
+export default App
